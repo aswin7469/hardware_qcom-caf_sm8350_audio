@@ -1,3 +1,5 @@
+ifneq ($(strip $(TARGET_PROVIDES_AUDIO_EXTNS)),true)
+
 #AudioHal-primaryHal-Hal path
 ifneq ($(BOARD_OPENSOURCE_DIR), )
   PRIMARY_HAL_PATH := $(BOARD_OPENSOURCE_DIR)/audio-hal/primary-hal/hal
@@ -16,8 +18,13 @@ else
 endif
 
 ifeq ($(ENABLE_AUDIO_LEGACY_TECHPACK),true)
+ifeq ($(TARGET_BOARD_AUTO),true)
+  LIBRARY_TINYCOMPRESS := libqti-tinycompress
+  LIBRARY_TINYCOMPRESS_INC := $(TOP)/vendor/qcom/opensource/tinycompress/include
+else
   LIBRARY_TINYCOMPRESS := libtinycompress
   LIBRARY_TINYCOMPRESS_INC := external/tinycompress/include
+endif
   LOCAL_CFLAGS += -DENABLE_AUDIO_LEGACY_PURE
 endif
 #--------------------------------------------
@@ -1279,4 +1286,5 @@ ifeq ($(strip $(AUDIO_FEATURE_ENABLED_DAEMON_SUPPORT)),true)
 endif
 
 include $(BUILD_SHARED_LIBRARY)
+endif
 endif
